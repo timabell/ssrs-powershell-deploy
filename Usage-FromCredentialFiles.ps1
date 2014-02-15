@@ -1,4 +1,3 @@
-
 if (-not (Test-Path("cred2.txt"))) {
   Write-Host "=========================================================" -foregroundcolor cyan
 	Write-Host "» To deploy the Debug configuration to localhost, type"
