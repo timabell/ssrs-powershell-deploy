@@ -94,7 +94,7 @@ function New-SSRSFolder (
 		$Proxy.CreateFolder($Leaf, $Parent, $null) > $null
 	} else {
 		if (!$recursing) {
-			Write-Verbose " - skipped; already exists"
+			Write-Verbose " - skipped, already exists"
 		}
 	}
 }
@@ -131,7 +131,7 @@ function New-SSRSDataSource (
 			Write-Verbose " - overwriting"
 			$write = $true
 		} else {
-			Write-Verbose " - skipped; already exists and rds is configured not to overwrite"
+			Write-Verbose " - skipped, already exists"
 		}
 	} else {
 		Write-Verbose " - creating new"
