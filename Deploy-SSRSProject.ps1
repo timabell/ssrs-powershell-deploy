@@ -152,7 +152,7 @@ function New-SSRSDataSet (
 	[switch]$Overwrite,
 	$DataSourcePaths
 ) {
-	Write-Verbose "New-SSRSDataSet -RsdPath $RsdPath -Folder $Folder"
+	Write-Verbose "Processing DataSet '$RsdPath'..."
 
 	$Folder = Normalize-SSRSFolder -Folder $Folder
 
