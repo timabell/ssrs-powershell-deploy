@@ -18,3 +18,6 @@ This repository was forked created from
 
 I've turned it into a proper github repo to allow discussion, pull requests etc.
 
+# Usage
+
+	.\Deploy-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
