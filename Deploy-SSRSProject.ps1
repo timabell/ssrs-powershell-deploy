@@ -105,7 +105,7 @@ function New-SSRSDataSource (
 	[string]$Folder,
 	[switch]$Overwrite
 ) {
-	Write-Verbose "New-SSRSDataSource -RdsPath $RdsPath -Folder $Folder"
+	Write-Verbose "Processing DataSource '$RdsPath'..."
 
 	$Folder = Normalize-SSRSFolder -Folder $Folder
 
