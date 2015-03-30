@@ -69,9 +69,15 @@ function Normalize-SSRSFolder (
 function New-SSRSFolder (
 	$Proxy,
 	[string]
-	$Name
+	$Name,
+	[bool]
+	$Recursing
 ) {
-	Write-Verbose "New-SSRSFolder -Name $Name"
+	if ($recursing) {
+		Write-Verbose " - creating parent folder '$Name'"
+	} else {
+		Write-Verbose "Creating SSRS folder '$Name'"
+	}
 
 	$Name = Normalize-SSRSFolder -Folder $Name
 
@@ -81,7 +87,7 @@ function New-SSRSFolder (
 		$Parent = $Parts[0..($Parts.Length-2)] -join '/'
 
 		if ($Parent) {
-			New-SSRSFolder -Proxy $Proxy -Name $Parent
+			New-SSRSFolder -Proxy $Proxy -Name $Parent -Recursing $true
 		} else {
 			$Parent = '/'
 		}
