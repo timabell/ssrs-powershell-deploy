@@ -226,7 +226,6 @@ function New-SSRSReport (
 			$DataSource = New-Object -TypeName SSRS.ReportingService2010.DataSource
 			$DataSource.Item = $Reference
 			$DataSource.Name = $_.Name
-			Write-Verbose $DataSource
 		}
 	if ($DataSources) {
 		$Proxy.SetItemDataSources($Folder + '/' + $Name, $DataSources)
@@ -240,7 +239,6 @@ function New-SSRSReport (
 				$Reference = New-Object -TypeName SSRS.ReportingService2010.ItemReference
 				$Reference.Reference = $DataSetPath
 				$Reference.Name = $_.Name
-				Write-Verbose $Reference
 			}
 		}
 	if ($References) {
