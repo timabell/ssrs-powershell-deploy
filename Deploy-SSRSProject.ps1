@@ -94,6 +94,8 @@ function New-SSRSFolder (
 
 		# create folder, suppressing console output from proxy
 		$Proxy.CreateFolder($Leaf, $Parent, $null) > $null
+	} else {
+		Write-Verbose " - skipped; already exists"
 	}
 }
 
