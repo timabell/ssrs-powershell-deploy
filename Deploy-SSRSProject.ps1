@@ -158,9 +158,12 @@ function New-SSRSDataSet (
 
 	$Name =  [System.IO.Path]::GetFileNameWithoutExtension($RsdPath)
 	$RawDefinition = Get-Content -Encoding Byte -Path $RsdPath
+	$overwrite = $true
+	$properties = $null
 	$warnings = $null
 
-	$Results = $Proxy.CreateCatalogItem("DataSet", $Name, $Folder, $true, $RawDefinition, $null, [ref]$warnings)
+	# https://msdn.microsoft.com/en-us/library/reportservice2010.reportingservice2010.createcatalogitem.aspx
+	$Results = $Proxy.CreateCatalogItem("DataSet", $Name, $Folder, $overwrite, $RawDefinition, $properties, [ref]$warnings)
 
 	[xml]$Rsd = Get-Content -Path $RsdPath
 	$DataSourcePath = $DataSourcePaths[$Rsd.SharedDataSet.DataSet.Query.DataSourceReference]
