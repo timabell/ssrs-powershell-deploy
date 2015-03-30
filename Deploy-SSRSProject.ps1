@@ -124,7 +124,21 @@ function New-SSRSDataSource (
 		Path =  $Folder + '/' + $Rds.RptDataSource.Name
 	}
 
-	if ($Overwrite -or $Proxy.GetItemType($DataSource.Path) -eq 'Unknown') {
+	$exists = $Proxy.GetItemType($DataSource.Path) -ne 'Unknown'
+	$write = $false
+	if ($exists) {
+		if ($Overwrite) {
+			Write-Verbose " - overwriting"
+			$write = $true
+		} else {
+			Write-Verbose " - skipped; already exists and rds is configured not to overwrite"
+		}
+	} else {
+		Write-Verbose " - creating new"
+		$write = $true
+	}
+
+	if ($write) {
 		$Proxy.CreateDataSource($DataSource.Name, $Folder, $Overwrite, $Definition, $null)
 	}
 
