@@ -73,9 +73,7 @@ function New-SSRSFolder (
 	[switch]
 	$Recursing
 ) {
-	if ($recursing) {
-		Write-Verbose " - creating parent folder '$Name'"
-	} else {
+	if (!$recursing) {
 		Write-Verbose "Creating SSRS folder '$Name'"
 	}
 
@@ -95,7 +93,9 @@ function New-SSRSFolder (
 		# create folder, suppressing console output from proxy
 		$Proxy.CreateFolder($Leaf, $Parent, $null) > $null
 	} else {
-		Write-Verbose " - skipped; already exists"
+		if (!$recursing) {
+			Write-Verbose " - skipped; already exists"
+		}
 	}
 }
 
