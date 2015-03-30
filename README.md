@@ -18,6 +18,10 @@ This repository was forked created from
 
 I've turned it into a proper github repo to allow discussion, pull requests etc.
 
+# Downloads
+
+Download a .zip or tarball from https://github.com/timabell/ssrs-powershell-deploy/releases/latest - this will be the current stable release.
+
 # Usage
 
 	.\Deploy-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
