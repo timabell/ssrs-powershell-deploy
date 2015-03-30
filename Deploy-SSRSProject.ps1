@@ -86,7 +86,8 @@ function New-SSRSFolder (
 			$Parent = '/'
 		}
 
-		$Proxy.CreateFolder($Leaf, $Parent, $null)
+		# create folder, suppressing console output from proxy
+		$Proxy.CreateFolder($Leaf, $Parent, $null) > $null
 	}
 }
 
