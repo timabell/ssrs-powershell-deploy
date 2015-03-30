@@ -26,7 +26,7 @@ function Normalize-SSRSFolder (
 $script:ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-Write-Verbose "$($MyInvocation.MyCommand.Name) -Path $Path -Configuration $Configuration"
+Write-Verbose "Reading '$Configuration' config from '$Path'"
 
 [xml]$Project = Get-Content -Path $Path
 
