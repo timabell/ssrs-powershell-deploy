@@ -70,7 +70,7 @@ function New-SSRSFolder (
 	$Proxy,
 	[string]
 	$Name,
-	[bool]
+	[switch]
 	$Recursing
 ) {
 	if ($recursing) {
@@ -87,7 +87,7 @@ function New-SSRSFolder (
 		$Parent = $Parts[0..($Parts.Length-2)] -join '/'
 
 		if ($Parent) {
-			New-SSRSFolder -Proxy $Proxy -Name $Parent -Recursing $true
+			New-SSRSFolder -Proxy $Proxy -Name $Parent -Recursing
 		} else {
 			$Parent = '/'
 		}
