@@ -139,7 +139,9 @@ function New-SSRSDataSource (
 	}
 
 	if ($write) {
-		$Proxy.CreateDataSource($DataSource.Name, $Folder, $Overwrite, $Definition, $null)
+		# assign result to avoid polluting return value. http://stackoverflow.com/a/23225503/10245
+		# Oh what an ugly language powerhell is. :-/
+		$foo = $Proxy.CreateDataSource($DataSource.Name, $Folder, $Overwrite, $Definition, $null)
 	}
 
 	return $DataSource
