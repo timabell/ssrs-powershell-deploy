@@ -8,7 +8,7 @@
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>
     <Name>ssrs-powershell-deploy</Name>
-    <DebugArguments>-path 'C:\SomeFolders\YourReportsProject.rptproj' -configuration Release -verbose -debug</DebugArguments>
+    <DebugArguments>-path 'Example-Reports\Example-Reports.rptproj' -configuration Release -verbose -debug</DebugArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
