@@ -32,6 +32,13 @@ be the current stable release.
 
 	.\Deploy-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
 
+Full parameter list is defined at the top of
+[Deploy-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Deploy-SSRSProject/Deploy-SSRSProject.ps1#L4)
+
+If I understand it correctly (I didn't write it) you can specify either a build
+configuration to read deployment settings from or you can specify all these
+settings manually (`ParameterSetName='Target'`).
+
 # Example reports
 
 To open the example reports project in visual studio and edit the reports
