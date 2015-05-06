@@ -13,11 +13,11 @@ expand it
 
 ## This fork
 
-This repository was forked created from
+This repository was forked from:
 
 * https://gist.github.com/Jonesie/9005796
-	* fordked from https://gist.github.com/ChrisMissal/5979564
-		* forked from https://gist.github.com/jstangroome/3043878
+	* which was forked from https://gist.github.com/ChrisMissal/5979564
+		* which was forked from https://gist.github.com/jstangroome/3043878
 
 I've turned it into a proper github repo to allow discussion, pull requests
 etc.
