@@ -273,6 +273,9 @@ $DataSourceFolder = Normalize-SSRSFolder -Folder $DataSourceFolder
 
 $Proxy = & $PSScriptRoot\New-SSRSWebServiceProxy.ps1 -Uri $ServerUrl -Credential $Credential
 
+$FullServerPath = $Proxy.Url
+Write-Verbose "Connecting to: $FullServerPath"
+
 New-SSRSFolder -Proxy $Proxy -Name $Folder
 New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
 New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
@@ -333,3 +336,5 @@ $Project.SelectNodes('Project/Reports/ProjectItem') |
 		$RdlPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
 		New-SSRSReport -Proxy $Proxy -RdlPath $RdlPath
 	}
+
+Write-Verbose "Done."
