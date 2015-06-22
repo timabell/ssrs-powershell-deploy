@@ -115,8 +115,10 @@ function New-SSRSDataSource (
 	$Definition = New-Object -TypeName SSRS.ReportingService2010.DataSourceDefinition
 	$Definition.ConnectString = $ConnProps.ConnectString
 	$Definition.Extension = $ConnProps.Extension
-	if ([Convert]::ToBoolean($ConnProps.IntegratedSecurity)) {
-		$Definition.CredentialRetrieval = 'Integrated'
+	if ([bool]($ConnProps.PSobject.Properties.name -match "IntegratedSecurity")) {
+		if ([Convert]::ToBoolean($ConnProps.IntegratedSecurity)) {
+			$Definition.CredentialRetrieval = 'Integrated'
+		}
 	}
 
 	$DataSource = New-Object -TypeName PSObject -Property @{
@@ -273,6 +275,9 @@ $DataSourceFolder = Normalize-SSRSFolder -Folder $DataSourceFolder
 
 $Proxy = & $PSScriptRoot\New-SSRSWebServiceProxy.ps1 -Uri $ServerUrl -Credential $Credential
 
+$FullServerPath = $Proxy.Url
+Write-Verbose "Connecting to: $FullServerPath"
+
 New-SSRSFolder -Proxy $Proxy -Name $Folder
 New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
 New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
@@ -333,3 +338,5 @@ $Project.SelectNodes('Project/Reports/ProjectItem') |
 		$RdlPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
 		New-SSRSReport -Proxy $Proxy -RdlPath $RdlPath
 	}
+
+Write-Verbose "Done."
