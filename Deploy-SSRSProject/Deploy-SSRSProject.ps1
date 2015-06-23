@@ -1,51 +1,140 @@
 ﻿#requires -version 2.0
 # https://github.com/timabell/ssrs-powershell-deploy
-[CmdletBinding()]
-param (
-	[parameter(Mandatory=$true)]
-	[ValidatePattern('\.rptproj$')]
-	[ValidateScript({ Test-Path -PathType Leaf -Path $_ })]
-	[string]
-	$Path,
+function Deploy-SSRSProject {
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory=$true)]
+		[ValidatePattern('\.rptproj$')]
+		[ValidateScript({ Test-Path -PathType Leaf -Path $_ })]
+		[string]
+		$Path,
 
-	[parameter(
-		ParameterSetName='Configuration',
-		Mandatory=$true)]
-	[string]
-	$Configuration,
+		[parameter(
+			ParameterSetName='Configuration',
+			Mandatory=$true)]
+		[string]
+		$Configuration,
 
-	[parameter(
-		ParameterSetName='Target',
-		Mandatory=$true)]
-	[ValidatePattern('^https?://')]
-	[string]
-	$ServerUrl,
+		[parameter(
+			ParameterSetName='Target',
+			Mandatory=$true)]
+		[ValidatePattern('^https?://')]
+		[string]
+		$ServerUrl,
 
-	[parameter(
-		ParameterSetName='Target',
-		Mandatory=$true)]
-	[string]
-	$Folder,
+		[parameter(
+			ParameterSetName='Target',
+			Mandatory=$true)]
+		[string]
+		$Folder,
 
-	[parameter(
-		ParameterSetName='Target',
-		Mandatory=$true)]
-	[string]
-	$DataSourceFolder,
+		[parameter(
+			ParameterSetName='Target',
+			Mandatory=$true)]
+		[string]
+		$DataSourceFolder,
 
-	[parameter(
-		ParameterSetName='Target',
-		Mandatory=$true)]
-	[string]
-	$DataSetFolder,
+		[parameter(
+			ParameterSetName='Target',
+			Mandatory=$true)]
+		[string]
+		$DataSetFolder,
 
-	[parameter(ParameterSetName='Target')]
-	[switch]
-	$OverwriteDataSources,
+		[parameter(ParameterSetName='Target')]
+		[switch]
+		$OverwriteDataSources,
 
-	[System.Management.Automation.PSCredential]
-	$Credential
-)
+		[System.Management.Automation.PSCredential]
+		$Credential
+	)
+
+	$script:ErrorActionPreference = 'Stop'
+	Set-StrictMode -Version Latest
+
+	$Path = $Path | Convert-Path
+	$ProjectRoot = $Path | Split-Path
+	[xml]$Project = Get-Content -Path $Path
+
+	if ($PSCmdlet.ParameterSetName -eq 'Configuration') {
+		$Config = & Get-SSRSProjectConfiguration -Path $Path -Configuration $Configuration
+		$ServerUrl = $Config.ServerUrl
+		$Folder = $Config.Folder
+		$DataSourceFolder = $Config.DataSourceFolder
+		$DataSetFolder = $Config.DataSetFolder
+		$OverwriteDataSources = $Config.OverwriteDataSources
+	}
+
+	$Folder = Normalize-SSRSFolder -Folder $Folder
+	$DataSourceFolder = Normalize-SSRSFolder -Folder $DataSourceFolder
+
+	$Proxy = & New-SSRSWebServiceProxy -Uri $ServerUrl -Credential $Credential
+
+	$FullServerPath = $Proxy.Url
+	Write-Verbose "Connecting to: $FullServerPath"
+
+	New-SSRSFolder -Proxy $Proxy -Name $Folder
+	New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
+	New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
+
+	$DataSourcePaths = @{}
+	$Project.SelectNodes('Project/DataSources/ProjectItem') |
+		ForEach-Object {
+			$RdsPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
+			$DataSource = New-SSRSDataSource -Proxy $Proxy -RdsPath $RdsPath -Folder $DataSourceFolder
+			$DataSourcePaths.Add($DataSource.Name, $DataSource.Path)
+		}
+
+	$DataSetPaths = @{}
+	$Project.SelectNodes('Project/DataSets/ProjectItem') |
+		ForEach-Object {
+			$RsdPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
+			$DataSet = New-SSRSDataSet -Proxy $Proxy -RsdPath $RsdPath -Folder $DataSetFolder -DataSourcePaths $DataSourcePaths
+			if(-not $DataSetPaths.Contains($DataSet.Name))
+			{
+				$DataSetPaths.Add($DataSet.Name, $DataSet.Path)
+			}
+		}
+
+	$Project.SelectNodes('Project/Reports/ResourceProjectItem') |
+		ForEach-Object {
+			if($_.MimeType.StartsWith('image/'))
+			{
+
+				$Path = $ProjectRoot | Join-Path -ChildPath $_.FullPath
+				$RawDefinition = Get-Content -Encoding Byte -Path $Path
+
+				$DescProp = New-Object -TypeName SSRS.ReportingService2010.Property
+				$DescProp.Name = 'Description'
+				$DescProp.Value = ''
+				$HiddenProp = New-Object -TypeName SSRS.ReportingService2010.Property
+				$HiddenProp.Name = 'Hidden'
+				$HiddenProp.Value = 'false'
+				$MimeProp = New-Object -TypeName SSRS.ReportingService2010.Property
+				$MimeProp.Name = 'MimeType'
+				$MimeProp.Value = $_.MimeType
+
+				$Properties = @($DescProp, $HiddenProp, $MimeProp)
+
+				if($_.FullPath.StartsWith('_'))
+				{
+					$HiddenProp.Value = 'true'
+				}
+
+				$Name = $_.FullPath
+				Write-Verbose "Creating resource $Name"
+				$warnings = $null
+				$Results = $Proxy.CreateCatalogItem("Resource", $_.FullPath, $Folder, $true, $RawDefinition, $Properties, [ref]$warnings)
+			}
+		}
+
+	$Project.SelectNodes('Project/Reports/ProjectItem') |
+		ForEach-Object {
+			$RdlPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
+			New-SSRSReport -Proxy $Proxy -RdlPath $RdlPath
+		}
+
+	Write-Verbose "Done."
+}
 
 function New-XmlNamespaceManager ($XmlDocument, $DefaultNamespacePrefix) {
 	$NsMgr = New-Object -TypeName System.Xml.XmlNamespaceManager -ArgumentList $XmlDocument.NameTable
@@ -251,92 +340,3 @@ function New-SSRSReport (
 		$Proxy.SetItemReferences($Folder + '/' + $Name, $References)
 	}
 }
-
-$script:ErrorActionPreference = 'Stop'
-Set-StrictMode -Version Latest
-
-$PSScriptRoot = $MyInvocation.MyCommand.Path | Split-Path
-
-$Path = $Path | Convert-Path
-$ProjectRoot = $Path | Split-Path
-[xml]$Project = Get-Content -Path $Path
-
-if ($PSCmdlet.ParameterSetName -eq 'Configuration') {
-	$Config = & $PSScriptRoot\Get-SSRSProjectConfiguration.ps1 -Path $Path -Configuration $Configuration
-	$ServerUrl = $Config.ServerUrl
-	$Folder = $Config.Folder
-	$DataSourceFolder = $Config.DataSourceFolder
-	$DataSetFolder = $Config.DataSetFolder
-	$OverwriteDataSources = $Config.OverwriteDataSources
-}
-
-$Folder = Normalize-SSRSFolder -Folder $Folder
-$DataSourceFolder = Normalize-SSRSFolder -Folder $DataSourceFolder
-
-$Proxy = & $PSScriptRoot\New-SSRSWebServiceProxy.ps1 -Uri $ServerUrl -Credential $Credential
-
-$FullServerPath = $Proxy.Url
-Write-Verbose "Connecting to: $FullServerPath"
-
-New-SSRSFolder -Proxy $Proxy -Name $Folder
-New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
-New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
-
-$DataSourcePaths = @{}
-$Project.SelectNodes('Project/DataSources/ProjectItem') |
-	ForEach-Object {
-		$RdsPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
-		$DataSource = New-SSRSDataSource -Proxy $Proxy -RdsPath $RdsPath -Folder $DataSourceFolder
-		$DataSourcePaths.Add($DataSource.Name, $DataSource.Path)
-	}
-
-$DataSetPaths = @{}
-$Project.SelectNodes('Project/DataSets/ProjectItem') |
-	ForEach-Object {
-		$RsdPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
-		$DataSet = New-SSRSDataSet -Proxy $Proxy -RsdPath $RsdPath -Folder $DataSetFolder -DataSourcePaths $DataSourcePaths
-		if(-not $DataSetPaths.Contains($DataSet.Name))
-		{
-			$DataSetPaths.Add($DataSet.Name, $DataSet.Path)
-		}
-	}
-
-$Project.SelectNodes('Project/Reports/ResourceProjectItem') |
-	ForEach-Object {
-		if($_.MimeType.StartsWith('image/'))
-		{
-
-			$Path = $ProjectRoot | Join-Path -ChildPath $_.FullPath
-			$RawDefinition = Get-Content -Encoding Byte -Path $Path
-
-			$DescProp = New-Object -TypeName SSRS.ReportingService2010.Property
-			$DescProp.Name = 'Description'
-			$DescProp.Value = ''
-			$HiddenProp = New-Object -TypeName SSRS.ReportingService2010.Property
-			$HiddenProp.Name = 'Hidden'
-			$HiddenProp.Value = 'false'
-			$MimeProp = New-Object -TypeName SSRS.ReportingService2010.Property
-			$MimeProp.Name = 'MimeType'
-			$MimeProp.Value = $_.MimeType
-
-			$Properties = @($DescProp, $HiddenProp, $MimeProp)
-
-			if($_.FullPath.StartsWith('_'))
-			{
-				$HiddenProp.Value = 'true'
-			}
-
-			$Name = $_.FullPath
-			Write-Verbose "Creating resource $Name"
-			$warnings = $null
-			$Results = $Proxy.CreateCatalogItem("Resource", $_.FullPath, $Folder, $true, $RawDefinition, $Properties, [ref]$warnings)
-		}
-	}
-
-$Project.SelectNodes('Project/Reports/ProjectItem') |
-	ForEach-Object {
-		$RdlPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
-		New-SSRSReport -Proxy $Proxy -RdlPath $RdlPath
-	}
-
-Write-Verbose "Done."
