@@ -6,7 +6,13 @@ param (
     [parameter(Mandatory=$true)]
     [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
     [string]
-    $Path
+    $Solution,
+    
+   	[parameter(
+		ParameterSetName='Configuration',
+		Mandatory=$true)]
+	[string]
+	$Configuration
 )
 
 $ErrorActionPreference = 'Stop'
@@ -18,9 +24,9 @@ $credentials = Get-Credential
 #$secpasswd = ConvertTo-SecureString "PlainTextPassword" -AsPlainText -Force
 #$mycreds = New-Object System.Management.Automation.PSCredential ("username", $secpasswd)
 
-$Path = ($Path | Resolve-Path).ProviderPath
+$Solution = ($Solution | Resolve-Path).ProviderPath
 
-$SolutionRoot = $Path | Split-Path
+$SolutionRoot = $Solution | Split-Path
 
 # Guid is for the Reports project type.
 $SolutionProjectPattern = @"
@@ -31,15 +37,15 @@ $SolutionProjectPattern = @"
 " (?<path> [^"]* ) " , \s+
 "@
 
-Get-Content -Path $Path |
+Get-Content -Path $Solution |
     ForEach-Object {
         if ($_ -match $SolutionProjectPattern) {
             $ProjectPath = $SolutionRoot | Join-Path -ChildPath $Matches['path']
             $ProjectPath = ($ProjectPath | Resolve-Path).ProviderPath
             #"$ProjectPath" = full path to the project file
             
-            $scriptPath = "..\Deploy-SSRSProject"
+            $scriptPath = "$PSScriptRoot\..\Deploy-SSRSProject\Deploy-SSRSProject.ps1"
             # deploy
-            & "$scriptPath\Deploy-SSRSProject.ps1" -path $ProjectPath -configuration Debug -verbose -credential $credentials
+            & $scriptPath -path $ProjectPath -configuration $configuration -verbose -credential $credentials
         }
     }
