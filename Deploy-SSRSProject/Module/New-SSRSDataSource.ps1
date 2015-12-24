@@ -18,9 +18,20 @@ function New-SSRSDataSource (
 	$Definition = New-Object -TypeName SSRS.ReportingService2010.DataSourceDefinition
 	$Definition.ConnectString = $ConnProps.ConnectString
 	$Definition.Extension = $ConnProps.Extension
-	if ([Convert]::ToBoolean($ConnProps.IntegratedSecurity)) {
-		$Definition.CredentialRetrieval = 'Integrated'
-	}
+  
+  
+  #Does the IntegratedSecurity property exist
+  $integratedproperty = $ConnProps | Get-Member -MemberType Property | where {$_.name -like 'IntegratedSecurity'}
+  
+  if($integratedproperty -ne $null)
+  {
+    if ([Convert]::ToBoolean($ConnProps.IntegratedSecurity)) {
+      $Definition.CredentialRetrieval = 'Integrated'
+    }
+  }
+  else{
+    write-verbose "IntegratedSecurity Missing"
+  }
 
 	$DataSource = New-Object -TypeName PSObject -Property @{
 		Name = $Rds.RptDataSource.Name
