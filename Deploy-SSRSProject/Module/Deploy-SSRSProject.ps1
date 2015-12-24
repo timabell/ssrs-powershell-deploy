@@ -34,6 +34,11 @@
     [bool]
     $OverwriteDataSources, #THESE ARE NOW OVERRRIDES IF $Configuration is specified
 
+    [parameter(Mandatory=$false)]
+    [bool]
+    $OverwriteDatasets, #THESE ARE NOW OVERRRIDES IF $Configuration is specified
+
+    
     [System.Management.Automation.PSCredential]
     $Credential
   )
@@ -82,6 +87,14 @@
       Write-Verbose "Using Project OverwriteDataSources: $($Config.OverwriteDataSources)"
       $OverwriteDataSources = $Config.OverwriteDataSources
     }
+    
+    if(!$PSBoundParameters.ContainsKey("OverwriteDatasets"))
+    {
+      Write-Verbose "Using Project OverwriteDatasets: $($Config.OverwriteDatasets)"
+      $OverwriteDatasets = $Config.OverwriteDatasets
+    }
+    
+    
   }
 
 
@@ -110,7 +123,7 @@
   $Project.SelectNodes('Project/DataSets/ProjectItem') |
     ForEach-Object {
       $RsdPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
-      $DataSet = New-SSRSDataSet -Proxy $Proxy -RsdPath $RsdPath -Folder $DataSetFolder -DataSourcePaths $DataSourcePaths
+      $DataSet = New-SSRSDataSet -Proxy $Proxy -RsdPath $RsdPath -Folder $DataSetFolder -DataSourcePaths $DataSourcePaths -Overwrite $OverwriteDatasets
       if(-not $DataSetPaths.Contains($DataSet.Name))
       {
         $DataSetPaths.Add($DataSet.Name, $DataSet.Path)

@@ -33,6 +33,12 @@
   if ($Config.Options.SelectSingleNode('OverwriteDataSources')) {
     $OverwriteDataSources = [Convert]::ToBoolean($Config.Options.OverwriteDataSources)
   }
+  
+  $OverwriteDatasets = $false
+  if ($Config.Options.SelectSingleNode('OverwriteDatasets')) {
+    $OverwriteDatasets = [Convert]::ToBoolean($Config.Options.OverwriteDatasets)
+  }
+  
 
   return New-Object -TypeName PSObject -Property @{
     ServerUrl = $Config.Options.TargetServerUrl
@@ -40,6 +46,7 @@
     DataSourceFolder = Normalize-SSRSFolder -Folder $Config.Options.TargetDataSourceFolder
     DataSetFolder = Normalize-SSRSFolder -Folder $Config.Options.TargetDataSetFolder
     OverwriteDataSources = $OverwriteDataSources
+    OverwriteDatasets = $OverwriteDatasets
   }
 
 }
