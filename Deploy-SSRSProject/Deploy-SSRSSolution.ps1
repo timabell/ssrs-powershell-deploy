@@ -44,7 +44,8 @@ Get-Content -Path $Solution |
             $ProjectPath = ($ProjectPath | Resolve-Path).ProviderPath
             #"$ProjectPath" = full path to the project file
             
-            $scriptPath = "$PSScriptRoot\..\Deploy-SSRSProject\Deploy-SSRSProject.ps1"
+            # $PSScriptRoot
+            $scriptPath = ".\Deploy-SSRSProject.ps1"
             # deploy
             & $scriptPath -path $ProjectPath -configuration $configuration -verbose -credential $credentials
         }
