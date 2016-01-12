@@ -12,14 +12,17 @@ param (
 		ParameterSetName='Configuration',
 		Mandatory=$true)]
 	[string]
-	$Configuration
+	$Configuration,
+    
+   	[System.Management.Automation.PSCredential]
+	$credentials
 )
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 # Get credentials, interactive
-$credentials = Get-Credential
+#$credentials = Get-Credential
 # non-interactive
 #$secpasswd = ConvertTo-SecureString "PlainTextPassword" -AsPlainText -Force
 #$mycreds = New-Object System.Management.Automation.PSCredential ("username", $secpasswd)
