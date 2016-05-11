@@ -31,6 +31,10 @@
 		$DataSetFolder, #THESE ARE NOW OVERRRIDES IF $Configuration is specified
 
 		[parameter(Mandatory=$false)]
+		[string]
+		$OutputPath, #THESE ARE NOW OVERRRIDES IF $Configuration is specified
+
+		[parameter(Mandatory=$false)]
 		[bool]
 		$OverwriteDataSources, #THESE ARE NOW OVERRRIDES IF $Configuration is specified
 
@@ -80,6 +84,12 @@
 		{
 			Write-Verbose "Using Project DataSetFolder: $($Config.DataSetFolder)"
 			$DataSetFolder = $Config.DataSetFolder
+		}
+
+		if([string]::IsNullOrEmpty($OutputPath))
+		{
+			Write-Verbose "Using Project OutputPath: $($Config.OutputPath)"
+			$OutputPath = $Config.OutputPath
 		}
 
 		if(!$PSBoundParameters.ContainsKey("OverwriteDataSources"))
@@ -164,8 +174,8 @@
 
 	$Project.SelectNodes('Project/Reports/ProjectItem') |
 		ForEach-Object {
-			$RdlPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
-			New-SSRSReport -Proxy $Proxy -RdlPath $RdlPath
+			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $_.FullPath
+			New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath
 		}
 
 	Write-host "Completed."
