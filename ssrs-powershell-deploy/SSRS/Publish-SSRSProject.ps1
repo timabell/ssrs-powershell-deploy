@@ -175,6 +175,22 @@
 	$Project.SelectNodes('Project/Reports/ProjectItem') |
 		ForEach-Object {
 			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $_.FullPath
+			$RdlPath = $ProjectRoot | join-path -ChildPath $_.FullPath
+		
+			if ((test-path $CompiledRdlPath) -eq $false)
+			{
+				write-error ('File {0} not found. Build your project before deploying.' -f $CompiledRdlPath)
+				break;
+			}
+			$RdlLastModified = (get-item $RdlPath).LastWriteTime
+			$CompiledRdlLastModified = (get-item $CompiledRdlPath).LastWriteTime
+			if ($RdlLastModified -gt $CompiledRdlLastModified)
+			{
+				#warning about to publish older report
+				write-error ('File {0} is older than source file {1}. Rebuild your project before publishing.' -f $CompiledRdlPath,$RdlPath)
+				break;
+			}
+
 			New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath
 		}
 
