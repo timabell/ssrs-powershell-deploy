@@ -7,5 +7,9 @@ function Normalize-SSRSFolder (
 		$Folder = '/' + $Folder
 	}
 
+	if($Folder.EndsWith('/')) {
+		$Folder = $Folder.Substring(0, $Folder.Length -1)
+	}
+
 	return $Folder
 }
