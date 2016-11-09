@@ -1,0 +1,10 @@
+# Per-solution / project / file code formatting settings, automatically configure your preferred editor.
+# http://EditorConfig.org
+# Visual Studio plugin that reads this file:
+# - https://visualstudiogallery.msdn.microsoft.com/c8bccfe2-650c-4b42-bc5c-845e21f96328
+
+root = true
+
+[*]
+indent_style = tab
+insert_final_newline = true
