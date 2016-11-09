@@ -1,0 +1,46 @@
+# User Settings Files
+*.suo
+*.user
+*.cache
+
+# Build Folders
+obj/
+bin/
+/build/
+/deploy/
+
+# Nuget Packages
+packages/
+
+# Test Results
+TestResults
+TestResult*.xml
+
+# Test Playlists
+*.playlist
+
+# Temporary Files
+*.log
+*.tmp
+
+# Git-Related Files
+*.orig
+*.patch
+*.rej
+
+# Visual Studio Profiler
+*.psess
+*.vsp
+*.vspx
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings
+
+# Windows Junk
+Thumbs.db
+Desktop.ini
+
+# OS X Junk
+.DS_Store
