@@ -28,11 +28,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Deploy-SSRSProject.ps1" />
-    <Compile Include="Get-SSRSProjectConfiguration.ps1" />
-    <Compile Include="New-SSRSWebServiceProxy.ps1" />
+    <Compile Include="Module\Deploy-SSRSProject.ps1" />
+    <Compile Include="Module\Get-SSRSCredential.ps1" />
+    <Compile Include="Module\Get-SSRSProjectConfiguration.ps1" />
+    <Compile Include="Module\New-SSRSDataSet.ps1" />
+    <Compile Include="Module\New-SSRSDataSource.ps1" />
+    <Compile Include="Module\New-SSRSFolder.ps1" />
+    <Compile Include="Module\New-SSRSReport.ps1" />
+    <Compile Include="Module\New-SSRSWebServiceProxy.ps1" />
+    <Compile Include="Module\New-XmlNamespaceManager.ps1" />
+    <Compile Include="Module\Normalize-SSRSFolder.ps1" />
+    <Compile Include="Module\SSRS.psm1" />
     <Compile Include="Usage-FromCredentialFiles.ps1" />
     <Compile Include="Usage-PlainText.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Module\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
