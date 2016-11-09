@@ -1,10 +1,11 @@
-$pass = ConvertTo-SecureString -AsPlainText -Force -String "password"
+
+$pass = "password"
 $user = "username"
 
-$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $user,$pass
+Import-Module .\Module\SSRS.psm1
 
 Write-Host "Deployment started..." -foregroundcolor yellow
-
-.\Deploy-SSRSProject.ps1 -Verbose -Path 'pathtoproject\ProjectFile.rptproj' -Configuration 'Release' -Credential $cred
+$cred=Get-SSRSCredential -username $user -password $pass
+Deploy-SSRSProject -Verbose -Path 'pathtoproject\ProjectFile.rptproj' -Configuration 'Release' -Credential $cred
 
 Write-Host "Deployment finished!" -foregroundcolor green

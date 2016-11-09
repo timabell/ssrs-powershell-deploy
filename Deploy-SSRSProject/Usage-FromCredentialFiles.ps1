@@ -13,6 +13,8 @@ $cred = new-object -typename System.Management.Automation.PSCredential -argument
 
 Write-Host "Deployment started..." -foregroundcolor yellow
 
-.\Deploy-SSRSProject.ps1 -Path 'pathtoproject\ProjectFile.rptproj' -Configuration 'Debug' -Credential $cred
+Import-Module .\Module\SSRS.psm1
+
+Deploy-SSRSProject -Path 'pathtoproject\ProjectFile.rptproj' -Configuration 'Debug' -Credential $cred
 
 Write-Host "Deployment finished!" -foregroundcolor green
