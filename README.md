@@ -1,11 +1,13 @@
-#About
+# About
 
 https://github.com/timabell/ssrs-powershell-deploy
 
 PowerShell scripts to deploy a SQL Server Reporting Services project
 (*.rptproj) to a Reporting Server
 
-## wiki
+[![Join the chat at https://gitter.im/ssrs-powershell-deploy/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ssrs-powershell-deploy/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## Wiki
 
 There's a [project wiki on
 github](https://github.com/timabell/ssrs-powershell-deploy/wiki), go ahead and
