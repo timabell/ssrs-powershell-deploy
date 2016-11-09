@@ -4,10 +4,10 @@ function New-SSRSFolder (
 	$Name,
 	[switch]
 	$Recursing
-) 
+)
 {
   $script:ErrorActionPreference = 'Stop'
-  
+
 	if (!$recursing) {
 		Write-Verbose "Creating SSRS folder '$Name'"
 	}

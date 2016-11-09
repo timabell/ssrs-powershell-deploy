@@ -1,10 +1,10 @@
 function New-SSRSReport (
 	$Proxy,
 	[string]$RdlPath
-) 
+)
 {
-  $script:ErrorActionPreference = 'Stop'
-  
+	$script:ErrorActionPreference = 'Stop'
+
 	[xml]$Definition = Get-Content -Path $RdlPath
 	$NsMgr = New-XmlNamespaceManager $Definition d
 

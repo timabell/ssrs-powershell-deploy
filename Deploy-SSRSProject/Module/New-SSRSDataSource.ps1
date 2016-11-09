@@ -4,10 +4,10 @@ function New-SSRSDataSource (
 	[string]$RdsPath,
 	[string]$Folder,
 	[bool]$Overwrite
-) 
+)
 {
-  $script:ErrorActionPreference = 'Stop'
-  
+	$script:ErrorActionPreference = 'Stop'
+
 	Write-Verbose "Processing DataSource '$RdsPath'..."
 
 	$Folder = Normalize-SSRSFolder -Folder $Folder
@@ -18,24 +18,24 @@ function New-SSRSDataSource (
 	$Definition = New-Object -TypeName SSRS.ReportingService2010.DataSourceDefinition
 	$Definition.ConnectString = $ConnProps.ConnectString
 	$Definition.Extension = $ConnProps.Extension
-  
-  
-  #Does the IntegratedSecurity property exist
-  $integratedproperty = $ConnProps | Get-Member -MemberType Property | where {$_.name -like 'IntegratedSecurity'}
-  
-  if($integratedproperty -ne $null)
-  {
-    if ([Convert]::ToBoolean($ConnProps.IntegratedSecurity)) {
-      $Definition.CredentialRetrieval = 'Integrated'
-    }
-  }
-  else{
-    write-verbose "IntegratedSecurity Missing"
-  }
+
+
+	#Does the IntegratedSecurity property exist
+	$integratedproperty = $ConnProps | Get-Member -MemberType Property | where {$_.name -like 'IntegratedSecurity'}
+
+	if($integratedproperty -ne $null)
+	{
+		if ([Convert]::ToBoolean($ConnProps.IntegratedSecurity)) {
+			$Definition.CredentialRetrieval = 'Integrated'
+		}
+	}
+	else{
+		write-verbose "IntegratedSecurity Missing"
+	}
 
 	$DataSource = New-Object -TypeName PSObject -Property @{
 		Name = $Rds.RptDataSource.Name
-		Path =  $Folder + '/' + $Rds.RptDataSource.Name
+		Path = $Folder + '/' + $Rds.RptDataSource.Name
 	}
 
 	$exists = $Proxy.GetItemType($DataSource.Path) -ne 'Unknown'

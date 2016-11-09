@@ -3,18 +3,18 @@
 # Path is the full path to the solution file, including the file name.
 # i.e. D:\dev\Reports\Reports.sln
 param (
-    [parameter(Mandatory=$true)]
-    [ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
-    [string]
-    $Solution,
-    
-   	[parameter(
+	[parameter(Mandatory=$true)]
+	[ValidateScript({ Test-Path -Path $_ -PathType Leaf })]
+	[string]
+	$Solution,
+
+	[parameter(
 		ParameterSetName='Configuration',
 		Mandatory=$true)]
 	[string]
 	$Configuration,
-    
-   	[System.Management.Automation.PSCredential]
+
+	[System.Management.Automation.PSCredential]
 	$credentials
 )
 
@@ -41,15 +41,15 @@ $SolutionProjectPattern = @"
 "@
 
 Get-Content -Path $Solution |
-    ForEach-Object {
-        if ($_ -match $SolutionProjectPattern) {
-            $ProjectPath = $SolutionRoot | Join-Path -ChildPath $Matches['path']
-            $ProjectPath = ($ProjectPath | Resolve-Path).ProviderPath
-            #"$ProjectPath" = full path to the project file
-            
-            # $PSScriptRoot
-            $scriptPath = ".\Deploy-SSRSProject.ps1"
-            # deploy
-            & $scriptPath -path $ProjectPath -configuration $configuration -verbose -credential $credentials
-        }
-    }
+	ForEach-Object {
+		if ($_ -match $SolutionProjectPattern) {
+			$ProjectPath = $SolutionRoot | Join-Path -ChildPath $Matches['path']
+			$ProjectPath = ($ProjectPath | Resolve-Path).ProviderPath
+			#"$ProjectPath" = full path to the project file
+
+			# $PSScriptRoot
+			$scriptPath = ".\Deploy-SSRSProject.ps1"
+			# deploy
+			& $scriptPath -path $ProjectPath -configuration $configuration -verbose -credential $credentials
+		}
+	}
