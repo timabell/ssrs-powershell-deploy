@@ -56,3 +56,7 @@ http://stackoverflow.com/questions/7960824/i-lost-datasets-pane-in-visual-studio
 The project caches both datasets and data. Remove all the `.data` files and the
 `bin/` folder(s) to be sure your changes will work when deployed.
 http://stackoverflow.com/questions/3424928/in-ssrs-is-there-a-way-to-disable-the-rdl-data-file-creation
+
+# Development
+
+Developed with [PowerShell Tools for Visual Studio 2015](https://visualstudiogallery.msdn.microsoft.com/c9eb3ba8-0c59-4944-9a62-6eee37294597)
