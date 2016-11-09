@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Deploy-SSRSSolution.ps1" />
     <Compile Include="Module\Deploy-SSRSProject.ps1" />
     <Compile Include="Module\Get-SSRSCredential.ps1" />
     <Compile Include="Module\Get-SSRSProjectConfiguration.ps1" />
