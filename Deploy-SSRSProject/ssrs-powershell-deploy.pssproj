@@ -40,11 +40,12 @@
     <Compile Include="Module\New-XmlNamespaceManager.ps1" />
     <Compile Include="Module\Normalize-SSRSFolder.ps1" />
     <Compile Include="Module\SSRS.psm1" />
-    <Compile Include="Usage-FromCredentialFiles.ps1" />
-    <Compile Include="Usage-PlainText.ps1" />
+    <Compile Include="Usage\Usage-FromCredentialFiles.ps1" />
+    <Compile Include="Usage\Usage-PlainText.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Module\" />
+    <Folder Include="Usage\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
