@@ -9,6 +9,13 @@
     <AssemblyName>MyApplication</AssemblyName>
     <Name>ssrs-powershell-deploy</Name>
     <DebugArguments>-path 'Example-Reports\Example-Reports.rptproj' -configuration Release -verbose -debug</DebugArguments>
+    <Author>Multiple contributors</Author>
+    <CompanyName />
+    <Copyright />
+    <Description>https://github.com/timabell/ssrs-powershell-deploy
+
+PowerShell module to deploy SQL Server Reporting Services project(s) (`.rptproj`) to a Reporting Server</Description>
+    <Guid>93d8a973-f14f-41b3-9faa-6eefd4cd8b43</Guid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +46,7 @@
     <Compile Include="Module\New-SSRSWebServiceProxy.ps1" />
     <Compile Include="Module\New-XmlNamespaceManager.ps1" />
     <Compile Include="Module\Normalize-SSRSFolder.ps1" />
+    <Compile Include="Module\SSRS.psd1" />
     <Compile Include="Module\SSRS.psm1" />
     <Compile Include="Usage\Usage-FromCredentialFiles.ps1" />
     <Compile Include="Usage\Usage-PlainText.ps1" />

@@ -2,8 +2,8 @@
 
 https://github.com/timabell/ssrs-powershell-deploy
 
-PowerShell scripts to deploy a SQL Server Reporting Services project
-(*.rptproj) to a Reporting Server
+PowerShell module to deploy SQL Server Reporting Services project(s)
+(`.rptproj`) to a Reporting Server
 
 [![Join the chat at https://gitter.im/ssrs-powershell-deploy/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ssrs-powershell-deploy/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
