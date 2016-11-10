@@ -35,8 +35,8 @@ PowerShell module to deploy SQL Server Reporting Services project(s) (`.rptproj`
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Deploy-SSRSSolution.ps1" />
     <Compile Include="Module\Deploy-SSRSProject.ps1" />
+    <Compile Include="Module\Deploy-SSRSSolution.ps1" />
     <Compile Include="Module\Get-SSRSCredential.ps1" />
     <Compile Include="Module\Get-SSRSProjectConfiguration.ps1" />
     <Compile Include="Module\New-SSRSDataSet.ps1" />
