@@ -28,14 +28,25 @@ etc.
 
 Download a .zip or tarball from
 https://github.com/timabell/ssrs-powershell-deploy/releases/latest - this will
-be the current stable release.
+be the current stable release. Note that this readme (in master) could be ahead
+of the one in the latest stable release so check the usage info there to avoid
+confusion. If you want the bleeding edge then
+[download](https://github.com/timabell/ssrs-powershell-deploy/archive/master.zip)
+or clone master.
 
 # Usage
 
-	.\Deploy-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
+Put the module somewhere on your `$env:PSModulePath` e.g.
+`C:\Users\tim\Documents\WindowsPowerShell\Modules\SSRS`. Currently you'll need
+to rename the `Module` folder to `SSRS` for it to be recognised.
+
+	Import-Module SSRS -PassThru
+	Get-Command -Module SSRS  # Run this to see available functions
+
+	Deploy-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
 
 Full parameter list is defined at the top of
-[Deploy-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Deploy-SSRSProject/Deploy-SSRSProject.ps1#L4)
+[Deploy-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Deploy-SSRSProject/Module/Deploy-SSRSProject.ps1#L5)
 
 If I understand it correctly (I didn't write it) you can specify either a build
 configuration to read deployment settings from or you can specify all these
@@ -50,14 +61,16 @@ you'll need [Sql Server Data Tools
 See also
 http://stackoverflow.com/questions/21351308/business-intelligence-ssdt-for-visual-studio-2013
 
-## Gotchas
+## General SSRS gotchas
 
 Disappearing dataset panel -
 http://stackoverflow.com/questions/7960824/i-lost-datasets-pane-in-visual-studio/28883272#28883272
 
-The project caches both datasets and data. Remove all the `.data` files and the
+VS report projects cache both datasets and data. Remove all the `.data` files and the
 `bin/` folder(s) to be sure your changes will work when deployed.
 http://stackoverflow.com/questions/3424928/in-ssrs-is-there-a-way-to-disable-the-rdl-data-file-creation
+
+More SSRS love http://timwise.blogspot.co.uk/2015/08/100-reasons-i-hate-ssrs.html  <3 <3
 
 # Development
 
