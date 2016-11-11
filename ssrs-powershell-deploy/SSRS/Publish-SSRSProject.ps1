@@ -114,15 +114,14 @@
 		
 			if ((test-path $CompiledRdlPath) -eq $false)
 			{
-				write-error ('File {0} not found. Build your project before deploying.' -f $CompiledRdlPath)
+				write-error ('Report "{0}" is listed in the project but wasn''t found in the bin\ folder. Rebuild your project before publishing.' -f $CompiledRdlPath)
 				break;
 			}
 			$RdlLastModified = (get-item $RdlPath).LastWriteTime
 			$CompiledRdlLastModified = (get-item $CompiledRdlPath).LastWriteTime
 			if ($RdlLastModified -gt $CompiledRdlLastModified)
 			{
-				#warning about to publish older report
-				write-error ('File {0} is older than source file {1}. Rebuild your project before publishing.' -f $CompiledRdlPath,$RdlPath)
+				write-error ('Report "{0}" in bin\ is older than source file "{1}". Rebuild your project before publishing.' -f $CompiledRdlPath,$RdlPath)
 				break;
 			}
 		}
