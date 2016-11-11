@@ -14,7 +14,7 @@
 #Larger methods that might use some of the ones above
 . $PSScriptRoot\New-SSRSWebServiceProxy.ps1
 . $PSScriptRoot\Get-SSRSProjectConfiguration.ps1
-. $PSScriptRoot\Deploy-SSRSProject.ps1
-. $PSScriptRoot\Deploy-SSRSSolution.ps1
+. $PSScriptRoot\Publish-SSRSProject.ps1
+. $PSScriptRoot\Publish-SSRSSolution.ps1
 
-Export-ModuleMember Get-SSRSCredential, Normalize-SSRSFolder, New-XmlNamespaceManager, New-SSRSFolder, New-SSRSDataSource, New-SSRSDataSet, New-SSRSReport, New-SSRSWebServiceProxy, Get-SSRSProjectConfiguration, Deploy-SSRSProject, Deploy-SSRSSolution
+Export-ModuleMember Get-SSRSCredential, Normalize-SSRSFolder, New-XmlNamespaceManager, New-SSRSFolder, New-SSRSDataSource, New-SSRSDataSet, New-SSRSReport, New-SSRSWebServiceProxy, Get-SSRSProjectConfiguration, Publish-SSRSProject, Publish-SSRSSolution

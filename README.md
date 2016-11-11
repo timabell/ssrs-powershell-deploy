@@ -2,7 +2,7 @@
 
 https://github.com/timabell/ssrs-powershell-deploy
 
-PowerShell module to deploy SQL Server Reporting Services project(s)
+PowerShell module to publish SQL Server Reporting Services project(s)
 (`.rptproj`) to a Reporting Server
 
 [![Join the chat at https://gitter.im/ssrs-powershell-deploy/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ssrs-powershell-deploy/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -42,10 +42,10 @@ Copy the SSRS folder and paste it somewhere on your `$env:PSModulePath` e.g.
 	Import-Module SSRS -PassThru
 	Get-Command -Module SSRS  # Run this to see available functions
 
-	Deploy-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
+	Publish-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
 
 Full parameter list is defined at the top of
-[Deploy-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Deploy-SSRSProject/Module/Deploy-SSRSProject.ps1#L5)
+[Publish-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Publish-SSRSProject/Module/Publish-SSRSProject.ps1#L5)
 
 If I understand it correctly (I didn't write it) you can specify either a build
 configuration to read deployment settings from or you can specify all these
@@ -66,7 +66,7 @@ Disappearing dataset panel -
 http://stackoverflow.com/questions/7960824/i-lost-datasets-pane-in-visual-studio/28883272#28883272
 
 VS report projects cache both datasets and data. Remove all the `.data` files and the
-`bin/` folder(s) to be sure your changes will work when deployed.
+`bin/` folder(s) to be sure your changes will work when published.
 http://stackoverflow.com/questions/3424928/in-ssrs-is-there-a-way-to-disable-the-rdl-data-file-creation
 
 More SSRS love http://timwise.blogspot.co.uk/2015/08/100-reasons-i-hate-ssrs.html  <3 <3

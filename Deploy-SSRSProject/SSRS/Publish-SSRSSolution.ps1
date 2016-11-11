@@ -1,4 +1,4 @@
-function Deploy-SSRSSolution{
+function Publish-SSRSSolution{
 	#requires -version 2.0
 	[CmdletBinding()]
 	# Path is the full path to the solution file, including the file name.
@@ -48,7 +48,7 @@ function Deploy-SSRSSolution{
 				$ProjectPath = ($ProjectPath | Resolve-Path).ProviderPath
 				#"$ProjectPath" = full path to the project file
 
-				& Deploy-SSRSProject -path $ProjectPath -configuration $configuration -verbose -credential $credentials
+				& Publish-SSRSProject -path $ProjectPath -configuration $configuration -verbose -credential $credentials
 			}
 		}
 
