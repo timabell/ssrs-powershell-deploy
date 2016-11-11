@@ -1,9 +1,11 @@
-# About
+# SSRS Powershell Deploy
 
-https://github.com/timabell/ssrs-powershell-deploy
+* https://github.com/timabell/ssrs-powershell-deploy
 
 PowerShell module to publish SQL Server Reporting Services project(s)
 (`.rptproj`) to a Reporting Server
+
+## Chat
 
 [![Join the chat at https://gitter.im/ssrs-powershell-deploy/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ssrs-powershell-deploy/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -24,7 +26,7 @@ This repository was forked from:
 I've turned it into a proper github repo to allow discussion, pull requests
 etc.
 
-# Downloads
+## Downloads
 
 Download a .zip or tarball from
 https://github.com/timabell/ssrs-powershell-deploy/releases/latest - this will
@@ -34,7 +36,7 @@ confusion. If you want the bleeding edge then
 [download](https://github.com/timabell/ssrs-powershell-deploy/archive/master.zip)
 or clone master.
 
-# Usage
+## Usage
 
 Copy the SSRS folder and paste it somewhere on your `$env:PSModulePath` e.g.
 `C:\Users\tim\Documents\WindowsPowerShell\Modules\SSRS`.
@@ -58,14 +60,10 @@ parameters.
 		[[-OverwriteDatasets] <bool>] [[-Credential] <pscredential>]
 		[<CommonParameters>]
 
-# Example reports
+## Example reports
 
-To open the example reports project in visual studio and edit the reports
-you'll need [Sql Server Data Tools
-(SSDT)](http://www.microsoft.com/en-us/download/details.aspx?id=42313)
-
-See also
-http://stackoverflow.com/questions/21351308/business-intelligence-ssdt-for-visual-studio-2013
+To open the Example-Reports project in Visual Studio you'll need [Sql Server
+Data Tools (SSDT)](https://msdn.microsoft.com/en-us/library/mt204009.aspx)
 
 ## General SSRS gotchas
 
@@ -78,7 +76,7 @@ http://stackoverflow.com/questions/3424928/in-ssrs-is-there-a-way-to-disable-the
 
 More SSRS love http://timwise.blogspot.co.uk/2015/08/100-reasons-i-hate-ssrs.html  <3 <3
 
-# Development
+## Development
 
 Developed with [PowerShell Tools for Visual Studio 2015](https://visualstudiogallery.msdn.microsoft.com/c9eb3ba8-0c59-4944-9a62-6eee37294597)
 
