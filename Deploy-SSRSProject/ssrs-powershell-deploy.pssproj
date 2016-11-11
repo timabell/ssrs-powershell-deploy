@@ -35,24 +35,24 @@ PowerShell module to deploy SQL Server Reporting Services project(s) (`.rptproj`
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Module\Deploy-SSRSProject.ps1" />
-    <Compile Include="Module\Deploy-SSRSSolution.ps1" />
-    <Compile Include="Module\Get-SSRSCredential.ps1" />
-    <Compile Include="Module\Get-SSRSProjectConfiguration.ps1" />
-    <Compile Include="Module\New-SSRSDataSet.ps1" />
-    <Compile Include="Module\New-SSRSDataSource.ps1" />
-    <Compile Include="Module\New-SSRSFolder.ps1" />
-    <Compile Include="Module\New-SSRSReport.ps1" />
-    <Compile Include="Module\New-SSRSWebServiceProxy.ps1" />
-    <Compile Include="Module\New-XmlNamespaceManager.ps1" />
-    <Compile Include="Module\Normalize-SSRSFolder.ps1" />
-    <Compile Include="Module\SSRS.psd1" />
-    <Compile Include="Module\SSRS.psm1" />
+    <Compile Include="SSRS\Deploy-SSRSProject.ps1" />
+    <Compile Include="SSRS\Deploy-SSRSSolution.ps1" />
+    <Compile Include="SSRS\Get-SSRSCredential.ps1" />
+    <Compile Include="SSRS\Get-SSRSProjectConfiguration.ps1" />
+    <Compile Include="SSRS\New-SSRSDataSet.ps1" />
+    <Compile Include="SSRS\New-SSRSDataSource.ps1" />
+    <Compile Include="SSRS\New-SSRSFolder.ps1" />
+    <Compile Include="SSRS\New-SSRSReport.ps1" />
+    <Compile Include="SSRS\New-SSRSWebServiceProxy.ps1" />
+    <Compile Include="SSRS\New-XmlNamespaceManager.ps1" />
+    <Compile Include="SSRS\Normalize-SSRSFolder.ps1" />
+    <Compile Include="SSRS\SSRS.psd1" />
+    <Compile Include="SSRS\SSRS.psm1" />
     <Compile Include="Usage\Usage-FromCredentialFiles.ps1" />
     <Compile Include="Usage\Usage-PlainText.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Module\" />
+    <Folder Include="SSRS\" />
     <Folder Include="Usage\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

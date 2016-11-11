@@ -36,9 +36,8 @@ or clone master.
 
 # Usage
 
-Put the module somewhere on your `$env:PSModulePath` e.g.
-`C:\Users\tim\Documents\WindowsPowerShell\Modules\SSRS`. Currently you'll need
-to rename the `Module` folder to `SSRS` for it to be recognised.
+Copy the SSRS folder and paste it somewhere on your `$env:PSModulePath` e.g.
+`C:\Users\tim\Documents\WindowsPowerShell\Modules\SSRS`.
 
 	Import-Module SSRS -PassThru
 	Get-Command -Module SSRS  # Run this to see available functions
