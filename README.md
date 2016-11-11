@@ -74,3 +74,21 @@ More SSRS love http://timwise.blogspot.co.uk/2015/08/100-reasons-i-hate-ssrs.htm
 # Development
 
 Developed with [PowerShell Tools for Visual Studio 2015](https://visualstudiogallery.msdn.microsoft.com/c9eb3ba8-0c59-4944-9a62-6eee37294597)
+
+To test the module locally directly from the source tree you can import by specifiying the path to the psd1 file.
+
+	PS C:\repo\ReportDefinitions> Import-Module C:\repo\tim\ssrs-powershell-deploy\ssrs-powershell-deploy\SSRS\SSRS.psd1
+	PS C:\repo\ReportDefinitions> Publish-SSRSProject
+
+See the exported commands with
+
+	PS C:\repo\ReportDefinitions> Get-Command -Module SSRS
+
+	CommandType     Name                                               Version    Source
+	-----------     ----                                               -------    ------
+	Function        Publish-SSRSProject                                1.2.0      SSRS
+	Function        Publish-SSRSSolution                               1.2.0      SSRS
+
+Unload again with
+
+	PS C:\repo\ReportDefinitions> Remove-Module SSRS
