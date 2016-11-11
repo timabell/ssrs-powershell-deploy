@@ -1,4 +1,5 @@
 ﻿@{
+	RootModule = "SSRS.psm1"
 	ModuleVersion = '1.2.0'
 	GUID = '58a90a5a-fba6-464c-8906-65d78d08d398'
 	Author = 'Multiple Authors'
