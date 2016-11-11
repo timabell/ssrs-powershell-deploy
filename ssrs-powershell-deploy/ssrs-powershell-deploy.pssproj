@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>6CAFC0C6-A428-4d30-A9F9-700E829FEA51</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyApplication</RootNamespace>
+    <AssemblyName>MyApplication</AssemblyName>
+    <Name>ssrs-powershell-deploy</Name>
+    <DebugArguments>-path 'Example-Reports\Example-Reports.rptproj' -configuration Release -verbose -debug</DebugArguments>
+    <Author>Multiple contributors</Author>
+    <CompanyName />
+    <Copyright />
+    <Description>https://github.com/timabell/ssrs-powershell-deploy
+
+PowerShell module to deploy SQL Server Reporting Services project(s) (`.rptproj`) to a Reporting Server</Description>
+    <Guid>93d8a973-f14f-41b3-9faa-6eefd4cd8b43</Guid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="SSRS\Publish-SSRSProject.ps1" />
+    <Compile Include="SSRS\Publish-SSRSSolution.ps1" />
+    <Compile Include="SSRS\Get-SSRSCredential.ps1" />
+    <Compile Include="SSRS\Get-SSRSProjectConfiguration.ps1" />
+    <Compile Include="SSRS\New-SSRSDataSet.ps1" />
+    <Compile Include="SSRS\New-SSRSDataSource.ps1" />
+    <Compile Include="SSRS\New-SSRSFolder.ps1" />
+    <Compile Include="SSRS\New-SSRSReport.ps1" />
+    <Compile Include="SSRS\New-SSRSWebServiceProxy.ps1" />
+    <Compile Include="SSRS\New-XmlNamespaceManager.ps1" />
+    <Compile Include="SSRS\Normalize-SSRSFolder.ps1" />
+    <Compile Include="SSRS\SSRS.psd1" />
+    <Compile Include="SSRS\SSRS.psm1" />
+    <Compile Include="Usage\Usage-FromCredentialFiles.ps1" />
+    <Compile Include="Usage\Usage-PlainText.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SSRS\" />
+    <Folder Include="Usage\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" />
+</Project>
