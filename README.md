@@ -47,9 +47,16 @@ Copy the SSRS folder and paste it somewhere on your `$env:PSModulePath` e.g.
 Full parameter list is defined at the top of
 [Publish-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Publish-SSRSProject/Module/Publish-SSRSProject.ps1#L5)
 
-If I understand it correctly (I didn't write it) you can specify either a build
-configuration to read deployment settings from or you can specify all these
-settings manually (`ParameterSetName='Target'`).
+You can either specifiy a build configuration to read from the project file, or
+you can specify all the information required to publish in the rest of the
+parameters.
+
+	Publish-SSRSProject [-Path] <string> [[-Configuration]
+		<string>] [[-ServerUrl] <string>] [[-Folder] <string>]
+		[[-DataSourceFolder] <string>] [[-DataSetFolder] <string>]
+		[[-OutputPath] <string>] [[-OverwriteDataSources] <bool>]
+		[[-OverwriteDatasets] <bool>] [[-Credential] <pscredential>]
+		[<CommonParameters>]
 
 # Example reports
 
