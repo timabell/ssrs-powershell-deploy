@@ -26,28 +26,20 @@ This repository was forked from:
 I've turned it into a proper github repo to allow discussion, pull requests
 etc.
 
-## Downloads
+## Installation
 
-Download a .zip or tarball from
-https://github.com/timabell/ssrs-powershell-deploy/releases/latest - this will
-be the current stable release. Note that this readme (in master) could be ahead
-of the one in the latest stable release so check the usage info there to avoid
-confusion. If you want the bleeding edge then
-[download](https://github.com/timabell/ssrs-powershell-deploy/archive/master.zip)
-or clone master.
+1. Download the .zip from
+	 https://github.com/timabell/ssrs-powershell-deploy/releases/latest
+2. Right-click the zip file in windows explorer, click "properties", and then
+	 click "Unblock".
+3. Create folder `Documents\WindowsPowerShell\Modules\`
+4. Open up the zip file, copy the SSRS folder, paste it into
+	 `Documents\WindowsPowerShell\Modules\`. (Or somewhere on your
+	 `$env:PSModulePath`)
 
 ## Usage
 
-Copy the SSRS folder and paste it somewhere on your `$env:PSModulePath` e.g.
-`C:\Users\tim\Documents\WindowsPowerShell\Modules\SSRS`.
-
-	Import-Module SSRS -PassThru
-	Get-Command -Module SSRS  # Run this to see available functions
-
 	Publish-SSRSProject.ps1 -path YourReportsProject.rptproj -configuration Release -verbose
-
-Full parameter list is defined at the top of
-[Publish-SSRSProject.ps1](https://github.com/timabell/ssrs-powershell-deploy/blob/master/Publish-SSRSProject/Module/Publish-SSRSProject.ps1#L5)
 
 You can either specifiy a build configuration to read from the project file, or
 you can specify all the information required to publish in the rest of the
