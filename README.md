@@ -13,7 +13,7 @@ PowerShell module to publish SQL Server Reporting Services project(s)
 
 There's a [project wiki on
 github](https://github.com/timabell/ssrs-powershell-deploy/wiki), go ahead and
-expand it 
+expand it
 
 ## This fork
 
@@ -27,6 +27,27 @@ I've turned it into a proper github repo to allow discussion, pull requests
 etc.
 
 ## Installation
+
+### PowerShell Gallery
+
+Install the [SSRS module](https://www.powershellgallery.com/packages/SSRS/)
+from [PowerShell Gallery](https://www.powershellgallery.com/):
+
+Make sure you have PowerShell Gallery installed (instructions on their
+homepage). It's already available in Windows 10.
+
+In an elevated powershell console run:
+
+	Install-Module -Name SSRS
+
+Say `y` to installing from untrusted. Then close the elevated console and you
+will now have the `Publish-SSRSProject`/`Solution` commands available in all
+your powershell sessions.
+
+If you can't use the gallery for some reason then you can do a manual install
+from a download:
+
+### Manual install
 
 1. Download the .zip from
 	 https://github.com/timabell/ssrs-powershell-deploy/releases/latest
