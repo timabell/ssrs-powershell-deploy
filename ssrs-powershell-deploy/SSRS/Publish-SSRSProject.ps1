@@ -197,5 +197,5 @@
 			New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath
 		}
 
-	Write-host "Completed."
+	Write-Verbose "Completed."
 }
