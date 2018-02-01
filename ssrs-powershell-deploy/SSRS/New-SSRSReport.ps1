@@ -1,6 +1,7 @@
 function New-SSRSReport (
 	$Proxy,
-	[string]$RdlPath
+	[string]$RdlPath,
+    $RdlName
 )
 {
 	$script:ErrorActionPreference = 'Stop'
@@ -10,7 +11,7 @@ function New-SSRSReport (
 
 	$RawDefinition = Get-Content -Encoding Byte -Path $RdlPath
 
-	$Name = $_.Name -replace '\.rdl$',''
+	$Name = $RdlName -replace '\.rdl$',''
 
 	$DescProp = New-Object -TypeName SSRS.ReportingService2010.Property
 	$DescProp.Name = 'Description'

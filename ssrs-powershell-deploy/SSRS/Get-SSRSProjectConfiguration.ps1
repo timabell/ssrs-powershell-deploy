@@ -21,31 +21,42 @@
 
 	[xml]$Project = Get-Content -Path $Path
 
-	$Config = $Project.SelectNodes('Project/Configurations/Configuration') |
-		Where-Object { $_.Name -eq $Configuration } |
-		Select-Object -First 1
+    $propertyGroupCount = $Project.Project.PropertyGroup.Count
+
+    for($i = 0; $i -lt $propertyGroupCount; $i++)
+    {
+        if($Project.Project.PropertyGroup[$i].FullPath -eq $Configuration)
+        {
+            $Config = $Project.Project.PropertyGroup[$i]
+            break
+        }
+    }
+
+	#$Config = $Project.SelectNodes('Project/PropertyGroup') |
+	#	Where-Object { $_.FullPath -eq $Configuration } |
+	#	Select-Object -First 1
 	if (-not $Config) {
-		throw "Could not find configuration $Configuration."
+		throw "Could not find configuration '$Configuration'."
 	}
 
 
 	$OverwriteDataSources = $false
-	if ($Config.Options.SelectSingleNode('OverwriteDataSources')) {
-		$OverwriteDataSources = [Convert]::ToBoolean($Config.Options.OverwriteDataSources)
+	if ($Config.SelectSingleNode('OverwriteDataSources')) {
+		$OverwriteDataSources = [Convert]::ToBoolean($Config.OverwriteDataSources)
 	}
 	
 	$OverwriteDatasets = $false
-	if ($Config.Options.SelectSingleNode('OverwriteDatasets')) {
-		$OverwriteDatasets = [Convert]::ToBoolean($Config.Options.OverwriteDatasets)
+	if ($Config.SelectSingleNode('OverwriteDatasets')) {
+		$OverwriteDatasets = [Convert]::ToBoolean($Config.OverwriteDatasets)
 	}
 	
 
 	return New-Object -TypeName PSObject -Property @{
-		ServerUrl = $Config.Options.TargetServerUrl
-		Folder = Normalize-SSRSFolder -Folder $Config.Options.TargetFolder
-		DataSourceFolder = Normalize-SSRSFolder -Folder $Config.Options.TargetDataSourceFolder
-		DataSetFolder = Normalize-SSRSFolder -Folder $Config.Options.TargetDataSetFolder
-		OutputPath = $Config.Options.OutputPath
+		ServerUrl = $Config.TargetServerUrl
+		Folder = Normalize-SSRSFolder -Folder $Config.TargetReportFolder
+		DataSourceFolder = Normalize-SSRSFolder -Folder $Config.TargetDataSourceFolder
+		DataSetFolder = Normalize-SSRSFolder -Folder $Config.TargetDataSetFolder
+		OutputPath = $Config.OutputPath
 		OverwriteDataSources = $OverwriteDataSources
 		OverwriteDatasets = $OverwriteDatasets
 	}
