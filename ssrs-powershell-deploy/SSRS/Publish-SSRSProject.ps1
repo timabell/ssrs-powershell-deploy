@@ -139,7 +139,7 @@
 	New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
 	New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
 
-	$DataSourceArray = [array] $Project.Project.ItemGroup[0].Report
+	$DataSourceArray = [array] $Project.Project.ItemGroup[0].DataSource
 	
 	$DataSourcePaths = @{}
 	for($i = 0; $i -lt $DataSourceArray.Count; $i++) {
