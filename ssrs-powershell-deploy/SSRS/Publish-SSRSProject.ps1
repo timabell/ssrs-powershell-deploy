@@ -140,7 +140,7 @@
 	New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
 
 	$DataSourcePaths = @{}
-	for($i = 0; $i -lt $Project.Project.ItemGroup[0].DataSource.Count; $i++) {
+	for($i = 0; $i -lt ([array]$Project.Project.ItemGroup[0].DataSource).Count; $i++) {
 		$RdsPath = $ProjectRoot | Join-Path -ChildPath $Project.Project.ItemGroup[0].DataSource[$i].Include
 
 		$DataSource = New-SSRSDataSource -Proxy $Proxy -RdsPath $RdsPath -Folder $DataSourceFolder -Overwrite $OverwriteDataSources
@@ -157,14 +157,16 @@
 				$DataSetPaths.Add($DataSet.Name, $DataSet.Path)
 			}
 		}
+	
+	$ReportsArray = [array] $Project.Project.ItemGroup[1].Report
 
-	for($i = 0; $i -lt $Project.Project.ItemGroup[1].Report.Count; $i++) {
+	for($i = 0; $i -lt $ReportsArray.Count; $i++) {
 
-            $extension = $Project.Project.ItemGroup[1].Report[$i].Include.Substring($Project.Project.ItemGroup[1].Report[$i].Include.length - 3 , 3)
+            $extension = $ReportsArray[$i].Include.Substring($ReportsArray[$i].Include.length - 3 , 3)
 
 			if(ImageExtensionValid -ext $extension){
 
-				$PathImage = $ProjectRoot | Join-Path -ChildPath $Project.Project.ItemGroup[1].Report[$i].Include
+				$PathImage = $ProjectRoot | Join-Path -ChildPath $ReportsArray[$i].Include
 				$RawDefinition = Get-Content -Encoding Byte -Path $PathImage
 
 				$DescProp = New-Object -TypeName SSRS.ReportingService2010.Property
@@ -179,17 +181,17 @@
 
 				$Properties = @($DescProp, $HiddenProp, $MimeProp)
 
-				$Name = $Project.Project.ItemGroup[1].Report[$i].Include
+				$Name = $ReportsArray[$i].Include
 				Write-Verbose "Creating resource $Name"
 				$warnings = $null
-				$Results = $Proxy.CreateCatalogItem("Resource", $Project.Project.ItemGroup[1].Report[$i].Include, $Folder, $true, $RawDefinition, $Properties, [ref]$warnings)
+				$Results = $Proxy.CreateCatalogItem("Resource", $ReportsArray[$i].Include, $Folder, $true, $RawDefinition, $Properties, [ref]$warnings)
 			}
 		}
 
-	for($i = 0; $i -lt $Project.Project.ItemGroup[1].Report.Count; $i++) {
-        if($Project.Project.ItemGroup[1].Report[$i].Include.EndsWith('.rdl')){
-			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $Project.Project.ItemGroup[1].Report[$i].Include
-			New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath -RdlName $Project.Project.ItemGroup[1].Report[$i].Include
+	for($i = 0; $i -lt $ReportsArray.Count; $i++) {
+        if($ReportsArray[$i].Include.EndsWith('.rdl')){
+			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $ReportsArray[$i].Include
+			New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath -RdlName $ReportsArray[$i].Include
         }
 	}
 
