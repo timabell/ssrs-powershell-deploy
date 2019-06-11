@@ -139,9 +139,11 @@
 	New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
 	New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
 
+	$DataSourceArray = [array] $Project.Project.ItemGroup[0].Report
+	
 	$DataSourcePaths = @{}
-	for($i = 0; $i -lt ([array]$Project.Project.ItemGroup[0].DataSource).Count; $i++) {
-		$RdsPath = $ProjectRoot | Join-Path -ChildPath $Project.Project.ItemGroup[0].DataSource[$i].Include
+	for($i = 0; $i -lt $DataSourceArray.Count; $i++) {
+		$RdsPath = $ProjectRoot | Join-Path -ChildPath $DataSourceArray[$i].Include
 
 		$DataSource = New-SSRSDataSource -Proxy $Proxy -RdsPath $RdsPath -Folder $DataSourceFolder -Overwrite $OverwriteDataSources
 		$DataSourcePaths.Add($DataSource.Name, $DataSource.Path)
