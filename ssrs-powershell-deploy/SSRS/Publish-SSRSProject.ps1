@@ -138,8 +138,13 @@
 	New-SSRSFolder -Proxy $Proxy -Name $Folder
 	New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
 	New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
+	
+	switch ($Project.Project.ItemGroup.Length) {
+		"3" {$DataSourceIndex=1;$reportIndex=2}
+		"2" {$DataSourceIndex=0;$reportIndex=1}
+	}
 
-	$DataSourceArray = [array] $Project.Project.ItemGroup[0].DataSource
+	$DataSourceArray = [array] $Project.Project.ItemGroup[$DataSourceIndex].DataSource
 	
 	$DataSourcePaths = @{}
 	for($i = 0; $i -lt $DataSourceArray.Count; $i++) {
@@ -150,9 +155,9 @@
 	}
 
 	$DataSetPaths = @{}
-	$Project.SelectNodes('Project/DataSets/ProjectItem') |
+	$Project.Project.ItemGroup.selectNodes("*") | Where-Object {$_.Include -like "*.rsd"} |
 		ForEach-Object {
-			$RsdPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
+			$RsdPath = $ProjectRoot | Join-Path -ChildPath $_.Include
 			$DataSet = New-SSRSDataSet -Proxy $Proxy -RsdPath $RsdPath -Folder $DataSetFolder -DataSourcePaths $DataSourcePaths -Overwrite $OverwriteDatasets
 			if(-not $DataSetPaths.Contains($DataSet.Name))
 			{
@@ -160,7 +165,7 @@
 			}
 		}
 	
-	$ReportsArray = [array] $Project.Project.ItemGroup[1].Report
+	$ReportsArray = [array] $Project.Project.ItemGroup[$reportIndex].Report
 
 	for($i = 0; $i -lt $ReportsArray.Count; $i++) {
 

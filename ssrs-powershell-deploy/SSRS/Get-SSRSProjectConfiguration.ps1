@@ -41,15 +41,16 @@
 
 
 	$OverwriteDataSources = $false
-	if ($Config.SelectSingleNode('OverwriteDataSources')) {
+	if ($Config.OverwriteDataSources -eq "True") {
 		$OverwriteDataSources = [Convert]::ToBoolean($Config.OverwriteDataSources)
 	}
 	
 	$OverwriteDatasets = $false
-	if ($Config.SelectSingleNode('OverwriteDatasets')) {
+	if ($Config.OverwriteDatasets -eq "True") {
 		$OverwriteDatasets = [Convert]::ToBoolean($Config.OverwriteDatasets)
 	}
 	
+
 
 	return New-Object -TypeName PSObject -Property @{
 		ServerUrl = $Config.TargetServerUrl
