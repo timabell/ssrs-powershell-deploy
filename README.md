@@ -69,8 +69,9 @@ parameters.
 	Publish-SSRSProject [-Path] <string> [[-Configuration]
 		<string>] [[-ServerUrl] <string>] [[-Folder] <string>]
 		[[-DataSourceFolder] <string>] [[-DataSetFolder] <string>]
-		[[-OutputPath] <string>] [[-OverwriteDataSources] <bool>]
-		[[-OverwriteDatasets] <bool>] [[-Credential] <pscredential>]
+		[[-OutputPath] <string>] 
+		[[-OverwriteDataSources] <bool>] [[-OverwriteDatasets] <bool>] 
+		[[-Credential] <pscredential>] [-CustomAuthentication]
 		[<CommonParameters>]
 
 ## Example reports
