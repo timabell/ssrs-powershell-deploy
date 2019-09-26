@@ -42,9 +42,12 @@
 		[bool]
 		$OverwriteDatasets, #THESE ARE NOW OVERRRIDES IF $Configuration is specified
 
-
 		[System.Management.Automation.PSCredential]
-		$Credential
+		$Credential,
+
+		[parameter(Mandatory=$false)]
+		[switch]
+		$CustomAuthentication
 	)
 
 
@@ -55,7 +58,8 @@
 	$ProjectRoot = $Path | Split-Path
 	[xml]$Project = Get-Content -Path $Path
 
-
+	$Namespace = New-Object Xml.XmlNamespaceManager $Project.NameTable
+	$Namespace.AddNamespace('ns', $Project.DocumentElement.NamespaceURI)
 
 	#Argument validation
 	if(![string]::IsNullOrEmpty($Configuration))
@@ -107,10 +111,11 @@
 
 	}
 
-	$Project.SelectNodes('Project/Reports/ProjectItem') |
+	$Project.SelectNodes('//ns:Report', $Namespace) |
 		ForEach-Object {
-			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $_.FullPath
-			$RdlPath = $ProjectRoot | join-path -ChildPath $_.FullPath
+			$Name = $_.Include
+			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $Name
+			$RdlPath = $ProjectRoot | join-path -ChildPath $Name
 		
 			if ((test-path $CompiledRdlPath) -eq $false)
 			{
@@ -130,27 +135,36 @@
 	$Folder = Normalize-SSRSFolder -Folder $Folder
 	$DataSourceFolder = Normalize-SSRSFolder -Folder $DataSourceFolder
 
-	$Proxy = New-SSRSWebServiceProxy -Uri $ServerUrl -Credential $Credential
+	$ProxyParameters = @{
+		Uri = $ServerUrl
+		Credential = $Credential
+		CustomAuthentication = $CustomAuthentication
+	}
 
+	Write-Verbose "Connecting to: $ServerUrl"
+
+	$Proxy = New-SSRSWebServiceProxy @ProxyParameters
 	$FullServerPath = $Proxy.Url
-	Write-Verbose "Connecting to: $FullServerPath"
 
 	New-SSRSFolder -Proxy $Proxy -Name $Folder
 	New-SSRSFolder -Proxy $Proxy -Name $DataSourceFolder
 	New-SSRSFolder -Proxy $Proxy -Name $DataSetFolder
 
 	$DataSourcePaths = @{}
-	for($i = 0; $i -lt $Project.Project.ItemGroup[0].DataSource.Count; $i++) {
-		$RdsPath = $ProjectRoot | Join-Path -ChildPath $Project.Project.ItemGroup[0].DataSource[$i].Include
+	$Project.SelectNodes('//ns:DataSource', $Namespace) |
+		ForEach-Object {
+			$Name = $_.Include
+			$RdsPath = $ProjectRoot | Join-Path -ChildPath $Name
 
-		$DataSource = New-SSRSDataSource -Proxy $Proxy -RdsPath $RdsPath -Folder $DataSourceFolder -Overwrite $OverwriteDataSources
-		$DataSourcePaths.Add($DataSource.Name, $DataSource.Path)
-	}
+			$DataSource = New-SSRSDataSource -Proxy $Proxy -RdsPath $RdsPath -Folder $DataSourceFolder -Overwrite $OverwriteDataSources
+			$DataSourcePaths.Add($DataSource.Name, $DataSource.Path)
+		}
 
 	$DataSetPaths = @{}
-	$Project.SelectNodes('Project/DataSets/ProjectItem') |
+	$Project.SelectNodes('//ns:DataSet', $Namespace) |
 		ForEach-Object {
-			$RsdPath = $ProjectRoot | Join-Path -ChildPath $_.FullPath
+			$Name = $_.Include
+			$RsdPath = $ProjectRoot | Join-Path -ChildPath $Name
 			$DataSet = New-SSRSDataSet -Proxy $Proxy -RsdPath $RsdPath -Folder $DataSetFolder -DataSourcePaths $DataSourcePaths -Overwrite $OverwriteDatasets
 			if(-not $DataSetPaths.Contains($DataSet.Name))
 			{
@@ -158,13 +172,14 @@
 			}
 		}
 
-	for($i = 0; $i -lt $Project.Project.ItemGroup[1].Report.Count; $i++) {
+	$Project.SelectNodes('//ns:Report', $Namespace) |
+		ForEach-Object {
+			$Name = $_.Include
+			$MimeType = $_.SelectSingleNode('ns:MimeType', $Namespace)
 
-            $extension = $Project.Project.ItemGroup[1].Report[$i].Include.Substring($Project.Project.ItemGroup[1].Report[$i].Include.length - 3 , 3)
+			if($MimeType){
 
-			if(ImageExtensionValid -ext $extension){
-
-				$PathImage = $ProjectRoot | Join-Path -ChildPath $Project.Project.ItemGroup[1].Report[$i].Include
+				$PathImage = $ProjectRoot | Join-Path -ChildPath $Name
 				$RawDefinition = Get-Content -Encoding Byte -Path $PathImage
 
 				$DescProp = New-Object -TypeName SSRS.ReportingService2010.Property
@@ -175,37 +190,21 @@
 				$HiddenProp.Value = 'false'
 				$MimeProp = New-Object -TypeName SSRS.ReportingService2010.Property
 				$MimeProp.Name = 'MimeType'
-				$MimeProp.Value = 'image/' + $extension
+				$MimeProp.Value = $MimeType
 
 				$Properties = @($DescProp, $HiddenProp, $MimeProp)
 
-				$Name = $Project.Project.ItemGroup[1].Report[$i].Include
+				$Name = $Name
 				Write-Verbose "Creating resource $Name"
 				$warnings = $null
-				$Results = $Proxy.CreateCatalogItem("Resource", $Project.Project.ItemGroup[1].Report[$i].Include, $Folder, $true, $RawDefinition, $Properties, [ref]$warnings)
+				$Results = $Proxy.CreateCatalogItem("Resource", $Name, $Folder, $true, $RawDefinition, $Properties, [ref]$warnings)
+			}
+		
+			if($Name.EndsWith('.rdl')){
+				$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $Name
+				New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath -RdlName $Name
 			}
 		}
 
-	for($i = 0; $i -lt $Project.Project.ItemGroup[1].Report.Count; $i++) {
-        if($Project.Project.ItemGroup[1].Report[$i].Include.EndsWith('.rdl')){
-			$CompiledRdlPath = $ProjectRoot | Join-Path -ChildPath $OutputPath | join-path -ChildPath $Project.Project.ItemGroup[1].Report[$i].Include
-			New-SSRSReport -Proxy $Proxy -RdlPath $CompiledRdlPath -RdlName $Project.Project.ItemGroup[1].Report[$i].Include
-        }
-	}
-
-	Write-host "Completed."
-}
-
-function ImageExtensionValid($ext){
-    $valid = 0;
-
-    Switch($ext)
-    {
-        'png' { $valid = 1; }
-        'bmp' { $valid = 1; }
-        'gif' { $valid = 1; }
-        'jpg' { $valid = 1; }
-    }
-
-    return $valid;
+	Write-host "Completed: $Path"
 }
