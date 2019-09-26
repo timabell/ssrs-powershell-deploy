@@ -20,33 +20,25 @@
 	Write-Verbose "Reading '$Configuration' config from '$Path'"
 
 	[xml]$Project = Get-Content -Path $Path
+	$Namespace = New-Object Xml.XmlNamespaceManager $Project.NameTable
+	$Namespace.AddNamespace('ns', $Project.DocumentElement.NamespaceURI)
 
-    $propertyGroupCount = $Project.Project.PropertyGroup.Count
+    $Config = $Project.SelectNodes('//ns:PropertyGroup', $Namespace) |
+        Where-Object { $_.FullPath -eq $Configuration } |
+        Select-Object -First 1
 
-    for($i = 0; $i -lt $propertyGroupCount; $i++)
-    {
-        if($Project.Project.PropertyGroup[$i].FullPath -eq $Configuration)
-        {
-            $Config = $Project.Project.PropertyGroup[$i]
-            break
-        }
-    }
-
-	#$Config = $Project.SelectNodes('Project/PropertyGroup') |
-	#	Where-Object { $_.FullPath -eq $Configuration } |
-	#	Select-Object -First 1
 	if (-not $Config) {
 		throw "Could not find configuration '$Configuration'."
 	}
 
 
 	$OverwriteDataSources = $false
-	if ($Config.SelectSingleNode('OverwriteDataSources')) {
+	if ($Config.SelectSingleNode('ns:OverwriteDataSources', $Namespace)) {
 		$OverwriteDataSources = [Convert]::ToBoolean($Config.OverwriteDataSources)
 	}
 	
 	$OverwriteDatasets = $false
-	if ($Config.SelectSingleNode('OverwriteDatasets')) {
+	if ($Config.SelectSingleNode('ns:OverwriteDatasets', $Namespace)) {
 		$OverwriteDatasets = [Convert]::ToBoolean($Config.OverwriteDatasets)
 	}
 	
