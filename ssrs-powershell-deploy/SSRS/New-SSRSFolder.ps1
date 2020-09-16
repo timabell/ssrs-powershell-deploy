@@ -44,35 +44,6 @@ function New-SSRSFolder (
 		$InheritParent = $true
 		$Policies = $Proxy.GetPolicies($Name, [ref]$InheritParent)
 
-		#Admin
-		$GroupUserName = 'Administrators'
-		$RoleName = 'Content Manager'
-
-		#Return all policies that contain the user/group we want to add
-		$Policy = $Policies | 
-		    Where-Object { $_.GroupUserName -eq $GroupUserName } | 
-		    Select-Object -First 1
-		#Add a new policy if doesnt exist
-		if (-not $Policy) 
-		{
-		    $Policy = New-Object ($policyType)
-		    $Policy.GroupUserName = $GroupUserName
-		    $Policy.Roles = @()
-			#Add new policy to the folder's policies
-		    $Policies += $Policy
-		}
-		#Add the role to the new Policy
-		$r = $Policy.Roles |
-	        Where-Object { $_.Name -eq $RoleName } |
-	        Select-Object -First 1
-	    	if (-not $r) 
-		{
-	        	$r = New-Object ($roleType)
-	        	$r.Name = $RoleName
-	        	$Policy.Roles += $r
-    		}
-		
-		#Subscribers
 		$GroupUserName = 'Subscribers'
 		$RoleName = 'Browser'
 
