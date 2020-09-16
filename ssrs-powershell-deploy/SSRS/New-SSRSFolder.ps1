@@ -32,4 +32,44 @@ function New-SSRSFolder (
 			Write-Verbose " - skipped, already exists"
 		}
 	}
+	
+	if($Name -eq '/Core' -or $Name -eq '/Client_Data')
+	{
+		Write-Verbose "Setting Policies for Subscribers..."
+
+		$type = $Proxy.GetType().Namespace;
+		$policyType = "{0}.Policy" -f $type;
+		$roleType = "{0}.Role" -f $type;
+		
+		$GroupUserName = 'Subscribers'
+		$RoleName = 'Browser'
+		$InheritParent = $true
+		$Policies = $Proxy.GetPolicies($Name, [ref]$InheritParent)
+
+		#Return all policies that contain the user/group we want to add
+		$Policy = $Policies | 
+		    Where-Object { $_.GroupUserName -eq $GroupUserName } | 
+		    Select-Object -First 1
+		#Add a new policy if doesnt exist
+		if (-not $Policy) 
+		{
+		    $Policy = New-Object ($policyType)
+		    $Policy.GroupUserName = $GroupUserName
+		    $Policy.Roles = @()
+			#Add new policy to the folder's policies
+		    $Policies += $Policy
+		}
+		#Add the role to the new Policy
+		$r = $Policy.Roles |
+	        Where-Object { $_.Name -eq $RoleName } |
+	        Select-Object -First 1
+	    	if (-not $r) 
+		{
+	        	$r = New-Object ($roleType)
+	        	$r.Name = $RoleName
+	        	$Policy.Roles += $r
+    		}
+		#Set folder policies
+		$Proxy.SetPolicies($Name, $Policies);
+	}
 }
