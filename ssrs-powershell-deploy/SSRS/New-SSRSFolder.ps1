@@ -45,7 +45,7 @@ function New-SSRSFolder (
 		$Policies = $Proxy.GetPolicies($Name, [ref]$InheritParent)
 
 		#Admin
-		$GroupUserName = 'Administrator'
+		$GroupUserName = 'Administrators'
 		$RoleName = 'Content Manager'
 
 		#Return all policies that contain the user/group we want to add
