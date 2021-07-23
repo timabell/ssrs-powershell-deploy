@@ -39,7 +39,7 @@ function New-SSRSFolder (
 
 	$InheritParent = $true
 
-	if($Name -eq '/Core' -or $Name -eq '/Client_Data' -or $Name -eq '/Datasets')
+	if($Name -eq '/Core' -or $Name -eq '/Client_Data' -or $Name -eq '/Import' -or $Name -eq '/Datasets')
 	{
 		Write-Verbose "Setting Policies for Subscribers..."
 
