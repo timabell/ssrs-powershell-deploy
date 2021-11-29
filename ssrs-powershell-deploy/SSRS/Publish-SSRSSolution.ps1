@@ -16,7 +16,11 @@ function Publish-SSRSSolution{
 		$Configuration,
 
 		[System.Management.Automation.PSCredential]
-		$credentials
+		$credentials,
+
+		[parameter(Mandatory=$false)]
+		[switch]
+		$CustomAuthentication
 	)
 
 	$ErrorActionPreference = 'Stop'
@@ -48,7 +52,15 @@ function Publish-SSRSSolution{
 				$ProjectPath = ($ProjectPath | Resolve-Path).ProviderPath
 				#"$ProjectPath" = full path to the project file
 
-				& Publish-SSRSProject -path $ProjectPath -configuration $configuration -verbose -credential $credentials
+				$ProjectParameters = @{
+					Path = $ProjectPath
+					Configuration = $configuration 
+					Credential = $credentials
+					Verbose = $true
+					CustomAuthentication = $CustomAuthentication
+				}
+
+				& Publish-SSRSProject @ProjectParameters
 			}
 		}
 

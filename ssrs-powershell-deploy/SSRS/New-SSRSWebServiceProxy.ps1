@@ -9,7 +9,11 @@
 		$Uri,
 
 		[System.Management.Automation.PSCredential]
-		$Credential
+		$Credential,
+
+		[parameter(Mandatory=$false)]
+		[switch]
+		$CustomAuthentication
 	)
 
 	$script:ErrorActionPreference = 'Stop'
@@ -51,5 +55,25 @@
 	}
 
 	$Proxy.Url = $Uri
+
+	Write-Verbose "Custom Authentication: $CustomAuthentication"
+
+	if ($CustomAuthentication)
+	{
+		if (!$Credential) 
+		{
+			$Credential = Get-Credential
+		}
+
+		$NetworkCredential = $Credential.GetNetworkCredential()
+		$proxy.CookieContainer = New-Object System.Net.CookieContainer
+
+		Write-Verbose "Logging in..."
+
+		$Proxy.LogonUser($NetworkCredential.UserName, $NetworkCredential.Password, $NetworkCredential.Domain);
+
+		Write-Verbose "Authenticated!"
+	}
+
 	return $Proxy
 }

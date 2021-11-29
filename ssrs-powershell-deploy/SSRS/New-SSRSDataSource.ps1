@@ -19,6 +19,8 @@ function New-SSRSDataSource (
 	$Definition.ConnectString = $ConnProps.ConnectString
 	$Definition.Extension = $ConnProps.Extension
 
+	$connectionString = New-Object System.Data.Common.DbConnectionStringBuilder
+	$connectionString.set_ConnectionString($ConnProps.ConnectString)
 
 	#Does the IntegratedSecurity property exist
 	$integratedproperty = $ConnProps | Get-Member -MemberType Property | where {$_.name -like 'IntegratedSecurity'}
@@ -31,6 +33,10 @@ function New-SSRSDataSource (
 	}
 	else{
 		write-verbose "IntegratedSecurity Missing"
+
+		$Definition.CredentialRetrieval = 'Store'
+		$Definition.UserName = $connectionString['User ID']
+		$Definition.Password = $connectionString['Password']
 	}
 
 	$DataSource = New-Object -TypeName PSObject -Property @{
